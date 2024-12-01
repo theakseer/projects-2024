@@ -1,9 +1,9 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { setuid } from "process";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 
 function SignUpPage() {
   const [user, setUser] = useState({
@@ -11,8 +11,20 @@ function SignUpPage() {
     username: "",
     password: "",
   });
-  const handleSubmit = async (e: Event) => {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/users/signup", user)
+      console.log("Signup Ok",res)
+
+    } catch (error : any) {
+      console.log("Signup Error",error)
+    } finally {
+      setLoading(false);
+    }
   };
   const classes = {
     button: "border w-fit px-3 py-1 bg-black text-white rounded-full active:bg-gray-700 self-center",
